@@ -1,5 +1,6 @@
 # Prime Numbers Generator
 [![Build Status](https://travis-ci.org/jayjamesjay/prime-numbers-generator.svg?branch=master)](https://travis-ci.org/jayjamesjay/prime-numbers-generator)
+
 Generate all prime numbers between two given numbers.
 
 * Simple
