@@ -1,4 +1,4 @@
 [[package]]
-name = "prime_number"
+name = "prime_numbers_generator"
 version = "0.1.0"
 

@@ -1,6 +1,6 @@
-extern crate prime_number;
+extern crate prime_numbers_generator;
 
-use prime_number::*;
+use prime_numbers_generator::*;
 
 fn main() {
     println!("Welcome in Prime Numbers Generator!");
