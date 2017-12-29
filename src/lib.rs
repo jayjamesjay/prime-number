@@ -1,4 +1,4 @@
-use std::io;
+use std::{io, cmp};
 
 pub struct PrimeNumbersGroup {
     start_num: u64,
@@ -6,15 +6,18 @@ pub struct PrimeNumbersGroup {
 }
 
 impl PrimeNumbersGroup {
-    pub fn new(start_num: u64, end_num: u64) -> PrimeNumbersGroup {
-        PrimeNumbersGroup { start_num, end_num }
+    pub fn new(num_1: u64, num_2: u64) -> PrimeNumbersGroup {
+        PrimeNumbersGroup {
+            start_num: cmp::min(num_1, num_2),
+            end_num: cmp::max(num_1, num_2),
+        }
     }
 
     pub fn generate_primes(&self) -> Vec<u64> {
         let mut numbers: Vec<u64> = Vec::new();
         let mut primality: bool;
 
-        for x in self.start_num..self.end_num {
+        for x in self.start_num..(self.end_num+1) {
             primality = true;
 
             for i in 2..(((x + 1) as f64).sqrt().ceil() as u64) {
