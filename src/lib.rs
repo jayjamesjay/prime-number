@@ -17,13 +17,20 @@ impl PrimeNumbersGroup {
         let mut numbers: Vec<u64> = Vec::new();
         let mut primality: bool;
 
-        for x in self.start_num..(self.end_num+1) {
+        for x in self.start_num..(self.end_num + 1) {
             primality = true;
 
-            for i in 2..(((x + 1) as f64).sqrt().ceil() as u64) {
-                if x % i == 0 {
+            match x {
+                0 | 1 => {
                     primality = false;
-                    break;
+                }
+                _ => {
+                    for i in 2..(((x + 1) as f64).sqrt().ceil() as u64) {
+                        if x % i == 0 {
+                            primality = false;
+                            break;
+                        }
+                    }
                 }
             }
 
