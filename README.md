@@ -14,7 +14,7 @@ Generate all prime numbers between two given numbers.
 2. Clone repository
 ```
 $ git clone https://github.com/jayjamesjay/prime-numbers-generator.git
-$ cd prime_numbers_generator
+$ cd prime-numbers-generator
 ```
 3. Build
 ```
