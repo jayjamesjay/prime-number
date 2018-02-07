@@ -15,7 +15,21 @@ fn main() {
         let primes_group = PrimeNumbersGroup::new(start_num, end_num);
         let primes = primes_group.generate_primes();
 
-        let primes_output = vector_to_string(&primes);
-        println!("Prime numbers in selected range are: {}", primes_output);
+        let primes_output = vec_to_string(&primes);
+        println!("Prime numbers in selected range are:\n{}", primes_output);
+
+        println!("Do you want to save prime numbers to a file? (y/n)");
+        if read_user_input() == "y" {
+            let file = File::new(
+                "prime_numbers".to_string(),
+                "txt".to_string(),
+                "generated_numbers".to_string(),
+            );
+
+            file.create_dir();
+
+            let file_path = file.create_file();
+            file.write_file(&file_path, &primes_output);
+        }
     }
 }
