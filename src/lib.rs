@@ -42,7 +42,7 @@ impl PrimeNumbersGroup {
                 },
             }
 
-            //If number is prime, wiil be pushed to vector
+            //If number is prime, will be pushed to vector
             if primality == true {
                 numbers.push(x);
             }
@@ -78,7 +78,7 @@ impl File {
 
     //Creates new empty file ('path/name.extension')
     pub fn create_file(&self) -> String {
-        let file_path = String::new() + &self.path + "/" + &self.name + "." + &self.extension;
+        let file_path = format!("{}/{}.{}", &self.path, &self.name, &self.extension);
         fs::File::create(&file_path).expect("Couldn't create a file.");
 
         //Returns path of created file (file_path == 'path/name.extension')

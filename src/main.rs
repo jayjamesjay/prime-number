@@ -20,8 +20,10 @@ fn main() {
 
         println!("Do you want to save prime numbers to a file? (y/n)");
         if read_user_input() == "y" {
+            let file_name = format!("prime_numbers_{}_{}", start_num, end_num);
+
             let file = File::new(
-                "prime_numbers".to_string(),
+                file_name,
                 "txt".to_string(),
                 "generated_numbers".to_string(),
             );

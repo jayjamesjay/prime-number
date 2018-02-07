@@ -20,7 +20,7 @@ $ cd prime-numbers-generator
 ```
 cargo build --release
 ```
-Built program should be placed in `repository_location\prime_numbers_generator\target\release`.
+Built program should be placed in `repository-location\prime-numbers-generator\target\release`.
 
 ## License
 Licensed under [MIT](https://github.com/jayjamesjay/prime-numbers-generator/blob/master/LICENSE).
