@@ -1,26 +1,37 @@
 #[cfg(test)]
 mod tests;
 
-use std::{cmp, fs, io, io::prelude::*, path::Path};
+use std::{cmp, fs, io::{self, prelude::*}, path::Path};
 
 pub struct PrimesGroup {
     //First number to check
     start_num: u64,
     //Last number to check
     end_num: u64,
+    //Prefered way of sorting numbers (A - ascending, D - descending)
+    order: char,
 }
 
 impl PrimesGroup {
     pub fn new(num_1: u64, num_2: u64) -> PrimesGroup {
+        let order: char;
+
+        if num_1 > num_2 {
+            order = 'D';
+        } else {
+            order = 'A';
+        }
+
         PrimesGroup {
             start_num: cmp::min(num_1, num_2),
             end_num: cmp::max(num_1, num_2),
+            order,
         }
     }
 
     ///Generates all prime numbers in selected range from `start_num` to `end_num`
     pub fn generate_primes(&self) -> Vec<u64> {
-        let mut primes: Vec<u64> = Vec::new();
+        let mut primes = Vec::new();
         let mut primality: bool;
 
         //Checks every number if it's prime or not
@@ -52,6 +63,10 @@ impl PrimesGroup {
             }
         }
 
+        if self.order == 'D' {
+            primes.reverse();
+        }
+
         primes
     }
 }
@@ -61,7 +76,7 @@ pub struct SimpleFile {
     name: String,
     //File's extension
     extension: String,
-    ///Path of the directory, in which file will be saved.
+    //Path of the directory, in which file will be saved.
     dir_path: String,
     //Direct path to the file.
     file_path: String,
