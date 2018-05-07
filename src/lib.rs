@@ -1,9 +1,11 @@
+//Copyright (c) 2018 jayjamesjay. Licensed under MIT
+//(https://github.com/jayjamesjay/prime-number/blob/master/LICENSE).
 #[cfg(test)]
 mod tests;
 
-use std::{cmp, fs, io::{self, prelude::*}, path::Path};
+use std::{fs, cmp::{self, Ordering}, io::{self, prelude::*}, path::Path};
 
-pub struct PrimesGroup {
+pub struct Primes {
     //First number to check
     start_num: u64,
     //Last number to check
@@ -12,17 +14,17 @@ pub struct PrimesGroup {
     order: char,
 }
 
-impl PrimesGroup {
-    pub fn new(num_1: u64, num_2: u64) -> PrimesGroup {
+impl Primes {
+    ///Creates new group of numbers to check for prime numbers
+    pub fn new(num_1: u64, num_2: u64) -> Primes {
         let order: char;
 
-        if num_1 > num_2 {
-            order = 'D';
-        } else {
-            order = 'A';
+        match num_2.cmp(&num_1) {
+            Ordering::Less => order = 'D',
+            Ordering::Greater | Ordering::Equal => order = 'A',
         }
 
-        PrimesGroup {
+        Primes {
             start_num: cmp::min(num_1, num_2),
             end_num: cmp::max(num_1, num_2),
             order,
@@ -32,33 +34,10 @@ impl PrimesGroup {
     ///Generates all prime numbers in selected range from `start_num` to `end_num`
     pub fn generate_primes(&self) -> Vec<u64> {
         let mut primes = Vec::new();
-        let mut primality: bool;
 
-        //Checks every number if it's prime or not
+        //Checks primality of every number in the `Primes`
         for num in self.start_num..(self.end_num + 1) {
-            primality = true;
-
-            match num {
-                0 | 1 => primality = false,
-                2 => primality = true,
-                _ => match num % 2 {
-                    0 => primality = false,
-                    _ => {
-                        let mut i = 3;
-
-                        while i < (num as f64).sqrt() as u64 + 2 {
-                            if num % i == 0 {
-                                primality = false;
-                                break;
-                            }
-
-                            i += 2;
-                        }
-                    }
-                },
-            }
-
-            if primality == true {
+            if check_primality(num) {
                 primes.push(num);
             }
         }
@@ -69,6 +48,33 @@ impl PrimesGroup {
 
         primes
     }
+}
+
+///Checks primality of single number
+pub fn check_primality(num: u64) -> bool {
+    let mut primality = true;
+
+    match num {
+        0 | 1 => primality = false,
+        2 => {}
+        _ => match num % 2 {
+            0 => primality = false,
+            _ => {
+                let mut i = 3;
+
+                while i < (num as f64).sqrt() as u64 + 2 {
+                    if num % i == 0 {
+                        primality = false;
+                        break;
+                    }
+
+                    i += 2;
+                }
+            }
+        },
+    }
+
+    primality
 }
 
 pub struct SimpleFile {
@@ -126,7 +132,7 @@ impl SimpleFile {
     }
 }
 
-///Reads user input and returns it as String
+///Reads user input and returns it as `String`
 pub fn read_user_input() -> String {
     let mut user_input = String::new();
 
@@ -137,7 +143,7 @@ pub fn read_user_input() -> String {
     user_input.trim().to_string()
 }
 
-///Reads user input and converts it to integer (u64)
+///Reads user input and converts it to unsigned integer (`u64`)
 pub fn input_as_num() -> u64 {
     let mut user_input: String;
     let number: u64;
@@ -147,8 +153,8 @@ pub fn input_as_num() -> u64 {
 
         number = match user_input.parse() {
             Ok(num) => num,
-            Err(_) => {
-                println!("Please try again.");
+            Err(e) => {
+                println!("Please try again. Error: {}", e);
                 user_input.clear();
                 continue;
             }
@@ -160,23 +166,22 @@ pub fn input_as_num() -> u64 {
     number
 }
 
-///Converts Vec to String
-pub fn vec_to_string(vec: &Vec<u64>) -> String {
+///Converts slice (`&[u64]`) to `String`
+pub fn vec_to_string(vec: &[u64]) -> String {
     let mut output_string = String::new();
-    let mut line_start: u64 = 0;
-    let mut line_end: u64;
+    let mut line_length = 0;
 
-    for x in vec {
+    for num in vec {
         //Adds whitespace after every value
-        let value = x.to_string() + " ";
-        output_string.push_str(&value);
+        let val = num.to_string() + " ";
+        output_string.push_str(&val);
 
-        line_end = output_string.len() as u64;
+        line_length += val.len() as u8;
 
         //Breaks line after (at least) 75 signs
-        if line_end - line_start >= 75 {
+        if line_length >= 75 {
             output_string.push_str("\n");
-            line_start = line_end;
+            line_length = 0;
         }
     }
 

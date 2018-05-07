@@ -1,13 +1,20 @@
 use super::*;
 
 #[test]
-fn primes_group_new() {
-    let _primes_group = PrimesGroup::new(0, 200);
+fn primes_new() {
+    let _primes_group = Primes::new(0, 200);
+    let _primes_group = Primes::new(220, 10);
+}
+
+#[test]
+fn check_prime() {
+    assert_eq!(check_primality(22), false);
+    assert_eq!(check_primality(331), true);
 }
 
 #[test]
 fn generate_primes() {
-    let primes_group = PrimesGroup::new(0, 200);
+    let primes_group = Primes::new(0, 200);
 
     assert_eq!(
         primes_group.generate_primes(),
@@ -18,7 +25,7 @@ fn generate_primes() {
         ]
     );
 
-    let primes_group = PrimesGroup::new(150, 0);
+    let primes_group = Primes::new(150, 0);
 
     assert_eq!(
         primes_group.generate_primes(),
