@@ -14,14 +14,13 @@ fn main() {
         let primes_group = Primes::new(start_num, end_num);
         let primes = primes_group.generate_primes();
 
-        if primes.len() != 0 {
+        if !primes.is_empty() {
             let primes_str = vec_to_string(&primes);
-            println!("Prime numbers in selected range are:\n{}", primes_str);
+            println!("Prime numbers in selected range are:\r\n{}", primes_str);
 
             println!("Do you want to save prime numbers to a file? (y/n)");
             if read_user_input() == "y" {
                 let file_name = format!("prime_numbers_{}_{}", start_num, end_num);
-
                 let file =
                     SimpleFile::new(file_name, "txt".to_string(), "prime_numbers".to_string());
 

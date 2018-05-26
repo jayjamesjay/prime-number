@@ -17,13 +17,13 @@ $ git clone https://github.com/jayjamesjay/prime-number.git
 ```
 3. Open repository folder in terminal
 ```
-$ cd repository-location/prime-number
+$ cd repository-location/repository-folder
 ```
 4. Build using cargo
 ```
 $ cargo build --release
 ```
-Built program should be placed in `repository-location/prime-number/target/release`.
+Built program should be placed in `repository-location/repository-folder/target/release`.
 
 ## License
 Licensed under [MIT](https://github.com/jayjamesjay/prime-number/blob/master/LICENSE).

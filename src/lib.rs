@@ -17,7 +17,7 @@ pub struct Primes {
 impl Primes {
     ///Creates new group of numbers to check for prime numbers
     pub fn new(num_1: u64, num_2: u64) -> Primes {
-        let order: char;
+        let order;
 
         match num_2.cmp(&num_1) {
             Ordering::Less => order = 'D',
@@ -36,8 +36,8 @@ impl Primes {
         let mut primes = Vec::new();
 
         //Checks primality of every number in the `Primes`
-        for num in self.start_num..(self.end_num + 1) {
-            if check_primality(num) {
+        for num in self.start_num..=self.end_num {
+            if is_prime(num) {
                 primes.push(num);
             }
         }
@@ -51,7 +51,7 @@ impl Primes {
 }
 
 ///Checks primality of single number
-pub fn check_primality(num: u64) -> bool {
+pub fn is_prime(num: u64) -> bool {
     let mut primality = true;
 
     match num {
@@ -90,7 +90,7 @@ pub struct SimpleFile {
 
 impl SimpleFile {
     pub fn new(name: String, extension: String, dir_path: String) -> SimpleFile {
-        let file_path: String = format!("{}/{}.{}", dir_path, name, extension);
+        let file_path = format!("{}/{}.{}", dir_path, name, extension);
 
         SimpleFile {
             name,
@@ -171,16 +171,16 @@ pub fn vec_to_string(vec: &[u64]) -> String {
     let mut output_string = String::new();
     let mut line_length = 0;
 
-    for num in vec {
+    for val in vec {
         //Adds whitespace after every value
-        let val = num.to_string() + " ";
+        let val = val.to_string() + " ";
         output_string.push_str(&val);
 
         line_length += val.len() as u8;
 
         //Breaks line after (at least) 75 signs
         if line_length >= 75 {
-            output_string.push_str("\n");
+            output_string.push_str("\r\n");
             line_length = 0;
         }
     }

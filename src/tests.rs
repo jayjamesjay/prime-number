@@ -8,8 +8,8 @@ fn primes_new() {
 
 #[test]
 fn check_prime() {
-    assert_eq!(check_primality(22), false);
-    assert_eq!(check_primality(331), true);
+    assert_eq!(is_prime(22), false);
+    assert_eq!(is_prime(331), true);
 }
 
 #[test]
