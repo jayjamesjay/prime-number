@@ -3,7 +3,9 @@
 #[cfg(test)]
 mod tests;
 
-use std::{fs, cmp::{self, Ordering}, io::{self, prelude::*}, path::Path};
+use std::{
+    cmp::{self, Ordering}, fs, io::{self, prelude::*},
+};
 
 pub struct Primes {
     //First number to check
@@ -17,17 +19,13 @@ pub struct Primes {
 impl Primes {
     ///Creates new group of numbers to check for prime numbers
     pub fn new(num_1: u64, num_2: u64) -> Primes {
-        let order;
-
-        match num_2.cmp(&num_1) {
-            Ordering::Less => order = 'D',
-            Ordering::Greater | Ordering::Equal => order = 'A',
-        }
-
         Primes {
             start_num: cmp::min(num_1, num_2),
             end_num: cmp::max(num_1, num_2),
-            order,
+            order: match num_2.cmp(&num_1) {
+                Ordering::Less => 'D',
+                _ => 'A',
+            },
         }
     }
 
@@ -102,14 +100,12 @@ impl SimpleFile {
 
     ///Creates directory in `dir_path`
     pub fn create_dir(&self) {
-        let dir_path = Path::new(&self.dir_path);
-        fs::create_dir_all(&dir_path).expect("Couldn't create a directory.");
+        fs::create_dir_all(&self.dir_path).expect("Couldn't create a directory.");
     }
 
     ///Creates new empty file in `file_path`
     pub fn create_file(&self) {
-        let file_path = Path::new(&self.file_path);
-        fs::File::create(&file_path).expect("Couldn't create a file.");
+        fs::File::create(&self.file_path).expect("Couldn't create a file.");
     }
 
     ///Saves data to file
@@ -167,11 +163,11 @@ pub fn input_as_num() -> u64 {
 }
 
 ///Converts slice (`&[u64]`) to `String`
-pub fn vec_to_string(vec: &[u64]) -> String {
+pub fn slice_to_string(slice: &[u64]) -> String {
     let mut output_string = String::new();
     let mut line_length = 0;
 
-    for val in vec {
+    for val in slice {
         //Adds whitespace after every value
         let val = val.to_string() + " ";
         output_string.push_str(&val);

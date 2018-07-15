@@ -8,8 +8,8 @@ fn primes_new() {
 
 #[test]
 fn check_prime() {
-    assert_eq!(is_prime(22), false);
-    assert_eq!(is_prime(331), true);
+    assert!(!is_prime(22));
+    assert!(is_prime(331));
 }
 
 #[test]
@@ -37,8 +37,8 @@ fn generate_primes() {
 }
 
 #[test]
-fn convert_vec_to_string() {
-    let vec = vec![1, 2, 3, 6, 5, 4];
+fn convert_slice_to_string() {
+    const NUMS: [u64; 6] = [1, 2, 3, 6, 5, 4];
 
-    assert_eq!(vec_to_string(&vec), "1 2 3 6 5 4");
+    assert_eq!(slice_to_string(&NUMS), "1 2 3 6 5 4");
 }
