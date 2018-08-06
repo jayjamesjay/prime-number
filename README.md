@@ -8,6 +8,21 @@ Generate all prime numbers between two given numbers.
 * No additional dependencies
 * Limited to 64-bit integers
 * Save primes to file
+* CLI
+
+## CLI Usage
+```
+Usage:
+  prime_number [ARGS] [OPTIONS]
+
+Arguments:
+  <start_num>
+  <end_num>
+
+Options:
+  --save
+
+```
 
 ## Build from source
 1. Make sure you have installed [Cargo & Rust](https://www.rust-lang.org/)

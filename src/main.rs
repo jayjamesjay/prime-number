@@ -1,30 +1,43 @@
 extern crate prime_number;
-use prime_number::*;
+
+use prime_number::{
+    io::{self, Config, FFile},
+    iter::Stringify,
+    prime::Primes,
+};
+use std::{env, process};
 
 fn main() {
+    let args = env::args();
     println!("Welcome in Prime Numbers Generator!");
 
-    println!("Please input the start number:");
-    let start_num = input_as_num();
+    let config = match args.len() {
+        3 | 4 => Config::new(args).unwrap_or_else(|e| {
+            eprintln!("Problem with parsing arguments: {}", e);
+            process::exit(1);
+        }),
+        _ => Config::request(),
+    };
 
-    println!("Please input the end number:");
-    let end_num = input_as_num();
+    println!("Generating prime numbers...");
 
-    let primes_group = Primes::new(start_num, end_num);
-    let primes = primes_group.generate_primes();
+    let primes_group = Primes::new(config.start_num, config.end_num);
+    let primes = primes_group.generate();
 
     if !primes.is_empty() {
-        let primes_str = slice_to_string(&primes);
-        println!("Prime numbers in selected range are:\r\n{}", primes_str);
+        let primes = primes.into_iter().stringify(" ", 80);
+        println!("Prime numbers in selected range are:\r\n{}", primes);
 
-        println!("Do you want to save prime numbers to a file? (y/n)");
-        if read_user_input() == "y" {
-            let file_name = format!("prime_numbers_{}_{}", start_num, end_num);
-            let file = SimpleFile::new(file_name, "txt".to_string(), "prime_numbers".to_string());
+        if config.save_file {
+            let file_name = format!("prime_numbers_{}_{}.txt", config.start_num, config.end_num);
+            let file = FFile::new(&file_name, "prime_numbers");
 
-            file.create_dir();
-            file.create_file();
-            file.write_file(&primes_str);
+            file.create_dirs()
+                .unwrap_or_else(|e| io::close_with_err(e, "Problem with creating directories"));
+            file.save(&primes)
+                .unwrap_or_else(|e| io::close_with_err(e, "Problem with saving file"));
+
+            println!("File {} have been saved.", file_name);
         }
     } else {
         println!("There aren't any prime numbers in selected range.");
