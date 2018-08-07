@@ -1,4 +1,5 @@
-use std::{env, fmt::Display, fs, io, process, str::FromStr};
+//! Basic IO operations
+use std::{env, ffi::OsStr, fmt::Display, fs, io, path::Path, process, str::FromStr};
 
 pub struct Config<T> {
     pub start_num: T,
@@ -133,35 +134,29 @@ impl<'a> ToBool<'a> for str {
     }
 }
 
-pub struct FFile<'a> {
-    //Name of the file with extension
-    name: &'a str,
-    //Path of the directory, in which file will be saved.
-    dirs: &'a str,
-}
+///Creates directories and file. Writes data to file.
+///This is a convenience function for using fs::create_dir_all and fs::write.
+///
+/// # Examples
+/// ```
+/// use prime_number::io;
+///
+/// io::write_to_dir("foo", "bar.txt", b"baz");
+/// ```
+pub fn write_to_dir<P, C>(dir: P, filename: P, content: C) -> Result<(), io::Error>
+where
+    P: AsRef<Path> + AsRef<OsStr>,
+    C: AsRef<[u8]>,
+{
+    let file_path = Path::new(&dir).join(&filename);
 
-impl<'a> FFile<'a> {
-    pub fn new(name: &'a str, dirs: &'a str) -> FFile<'a> {
-        FFile { name, dirs }
-    }
-
-    ///Recursively creates a directory and all missing parent directories
-    pub fn create_dirs(&self) -> Result<(), io::Error> {
-        fs::create_dir_all(&self.dirs)?;
-        Ok(())
-    }
-
-    ///Creates new empty file in `self.dir/self.name` and writes data to it
-    pub fn save(&self, data: &str) -> Result<(), io::Error> {
-        let file_path = format!("{}/{}", self.dirs, self.name);
-
-        fs::write(&file_path, data)?;
-        Ok(())
-    }
+    fs::create_dir_all(dir)?;
+    fs::write(file_path, content)?;
+    Ok(())
 }
 
 ///Displays error `message` and `err` to user. Exits the program.
-pub fn close_with_err<T: Display>(err: T, message: &str) {
+pub fn exit_with_err<T: Display>(err: T, message: &str) {
     eprintln!("{}: {}", message, err);
     process::exit(1);
 }

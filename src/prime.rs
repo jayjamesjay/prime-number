@@ -1,3 +1,4 @@
+//! Prime numbers generation 
 use std::cmp::{self, Ordering};
 
 pub struct Primes {

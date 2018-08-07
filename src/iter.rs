@@ -1,3 +1,4 @@
+//! Module for working with iterators
 use std::vec;
 
 pub trait Stringify {

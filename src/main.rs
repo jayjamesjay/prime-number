@@ -1,11 +1,11 @@
 extern crate prime_number;
 
 use prime_number::{
-    io::{self, Config, FFile},
+    io::{self, Config},
     iter::Stringify,
     prime::Primes,
 };
-use std::{env, process};
+use std::{env, process, io::Error};
 
 fn main() {
     let args = env::args();
@@ -19,6 +19,12 @@ fn main() {
         _ => Config::request(),
     };
 
+    if let Err(e) = run(config) {
+        io::exit_with_err(e, "Problem with saving file")
+    }
+}
+
+fn run(config: Config<u64>) -> Result<(), Box<Error>> {
     println!("Generating prime numbers...");
 
     let primes_group = Primes::new(config.start_num, config.end_num);
@@ -29,17 +35,15 @@ fn main() {
         println!("Prime numbers in selected range are:\r\n{}", primes);
 
         if config.save_file {
-            let file_name = format!("prime_numbers_{}_{}.txt", config.start_num, config.end_num);
-            let file = FFile::new(&file_name, "prime_numbers");
+            const PREFIX: &str = "prime_numbers";
+            let filename = format!("{}_{}_{}.txt", PREFIX, config.start_num, config.end_num);
 
-            file.create_dirs()
-                .unwrap_or_else(|e| io::close_with_err(e, "Problem with creating directories"));
-            file.save(&primes)
-                .unwrap_or_else(|e| io::close_with_err(e, "Problem with saving file"));
-
-            println!("File {} have been saved.", file_name);
+            io::write_to_dir(PREFIX, &filename, &primes.as_bytes())?;
+            println!("File {} have been saved.", filename);
         }
     } else {
         println!("There aren't any prime numbers in selected range.");
     }
+
+    Ok(())
 }
